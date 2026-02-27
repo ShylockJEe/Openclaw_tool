@@ -128,6 +128,7 @@ install_missing_dependencies() {
     log_info "Dependency '$dep' is missing, installing..."
     if ! install_dependency "$dep"; then
       case "$dep" in
+        git) return "$ERR_GIT_MISSING" ;;
         node) return "$ERR_NODE_INSTALL" ;;
         pnpm) return "$ERR_PNPM_INSTALL" ;;
         docker) return "$ERR_DOCKER_INSTALL" ;;
@@ -229,8 +230,9 @@ main() {
     *) return 1 ;;
   esac
 
-  if ! run_preflight; then
-    local code="$?"
+  run_preflight
+  local code="$?"
+  if [[ "$code" -ne 0 ]]; then
     log_error "Preflight failed with code=$code"
     print_fix_suggestion "$code"
     return "$code"
@@ -244,22 +246,25 @@ main() {
     return 0
   fi
 
-  if ! install_missing_dependencies; then
-    local code="$?"
+  install_missing_dependencies
+  code="$?"
+  if [[ "$code" -ne 0 ]]; then
     log_error "Dependency installation failed with code=$code"
     print_fix_suggestion "$code"
     return "$code"
   fi
 
-  if ! run_official_installer; then
-    local code="$?"
+  run_official_installer
+  code="$?"
+  if [[ "$code" -ne 0 ]]; then
     log_error "Official installer failed with code=$code"
     print_fix_suggestion "$code"
     return "$code"
   fi
 
-  if ! verify_installation; then
-    local code="$?"
+  verify_installation
+  code="$?"
+  if [[ "$code" -ne 0 ]]; then
     log_error "Verification failed with code=$code"
     print_fix_suggestion "$code"
     return "$code"

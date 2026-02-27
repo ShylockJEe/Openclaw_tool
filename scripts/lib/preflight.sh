@@ -389,12 +389,7 @@ install_node() {
   esac
 }
 
-install_pnpm() {
-  if command_exists npm; then
-    run_with_optional_sudo npm install -g pnpm
-    return $?
-  fi
-
+install_pnpm_with_package_manager() {
   case "$PKG_MANAGER" in
     brew)
       run_cmd brew install pnpm
@@ -419,9 +414,39 @@ install_pnpm() {
       run_with_optional_sudo zypper --non-interactive install pnpm
       ;;
     *)
-      return 1
+      return 2
       ;;
   esac
+}
+
+install_pnpm() {
+  if install_pnpm_with_package_manager; then
+    return 0
+  fi
+
+  if [[ "$?" -eq 1 ]]; then
+    log_warn "Package manager install for pnpm failed. Falling back to npm."
+  fi
+
+  if ! command_exists npm; then
+    return 1
+  fi
+
+  if run_with_optional_sudo npm install -g pnpm; then
+    return 0
+  fi
+
+  if [[ "${OPENCLAW_ENABLE_INSECURE_NPM_RETRY:-true}" == "true" ]]; then
+    log_warn "npm install failed, retrying pnpm install with relaxed SSL for constrained networks."
+    if run_with_optional_sudo npm --strict-ssl=false --registry=https://registry.npmmirror.com install -g pnpm; then
+      return 0
+    fi
+    if run_with_optional_sudo npm --strict-ssl=false --registry=https://registry.npmjs.org install -g pnpm; then
+      return 0
+    fi
+  fi
+
+  return 1
 }
 
 install_docker() {

@@ -288,6 +288,54 @@ case_wsl_detection() {
   assert_contains "$out" "os=wsl"
 }
 
+case_main_dependency_error_code() {
+  local out
+  out="$(bash -c '
+    set -u
+    source "'"$ROOT_DIR"'/install.sh"
+    init_logging() { :; }
+    print_banner() { :; }
+    parse_args() { return 0; }
+    run_preflight() { return 0; }
+    print_quick_summary() { :; }
+    preview_plan() { :; }
+    install_missing_dependencies() { return 41; }
+    run_official_installer() { return 0; }
+    verify_installation() { return 0; }
+    print_fix_suggestion() { echo "fix:$1"; }
+    OPENCLAW_DRY_RUN=false
+    main
+    echo "code=$?"
+  ')"
+  assert_contains "$out" "Dependency installation failed with code=41"
+  assert_contains "$out" "code=41"
+}
+
+case_pnpm_insecure_retry_path() {
+  local out
+  out="$(bash -c '
+    set -u
+    source "'"$ROOT_DIR"'/scripts/lib/common.sh"
+    source "'"$ROOT_DIR"'/scripts/lib/diagnose.sh"
+    source "'"$ROOT_DIR"'/scripts/lib/preflight.sh"
+    PKG_MANAGER="brew"
+    install_pnpm_with_package_manager() { return 1; }
+    command_exists() { [[ "$1" == "npm" ]]; }
+    calls=0
+    run_with_optional_sudo() {
+      calls=$((calls + 1))
+      if [[ $calls -eq 1 ]]; then
+        return 1
+      fi
+      return 0
+    }
+    install_pnpm
+    echo "rc=$? calls=$calls"
+  ')"
+  assert_contains "$out" "rc=0"
+  assert_contains "$out" "calls=2"
+}
+
 main() {
   run_case "help" case_help
   run_case "dry-run" case_dry_run_success
@@ -305,6 +353,8 @@ main() {
   run_case "no-pkg-manager" case_no_package_manager_mapping
   run_case "official-installer-failure" case_official_installer_failure_mapping
   run_case "wsl-detection" case_wsl_detection
+  run_case "main-error-code" case_main_dependency_error_code
+  run_case "pnpm-insecure-retry" case_pnpm_insecure_retry_path
   printf "PASS: install.test.sh\n"
 }
 
