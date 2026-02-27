@@ -20,7 +20,7 @@ for token in "./install.sh" "install.ps1" "--dry-run" "--skip-docker" "openclaw-
   fi
 done
 
-for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh"; do
+for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh" "| bash -s -- --fast"; do
   if [[ "$content" != *"$token"* ]]; then
     echo "FAIL: missing fast-install token in README.md -> $token" >&2
     exit 1

@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
 
+# This installer relies on Bash features (arrays, BASH_SOURCE).
+# If invoked via `sh`, provide a clear error and guidance.
+if [ -z "${BASH_VERSION:-}" ]; then
+  if command -v bash >/dev/null 2>&1; then
+    case "${0##*/}" in
+      sh|dash|ash)
+        echo "ERROR: This installer must run with bash, not sh."
+        echo "Use:"
+        echo "  curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh | bash -s -- --fast"
+        exit 1
+        ;;
+      *)
+        exec bash "$0" "$@"
+        ;;
+    esac
+  else
+    echo "ERROR: bash is not installed. Please install bash first."
+    exit 1
+  fi
+fi
+
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
