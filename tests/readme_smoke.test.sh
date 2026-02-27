@@ -47,7 +47,7 @@ for token in "OPENCLAW_RAW_INSTALL_URL" "curl -fsSL" "raw.githubusercontent.com/
 done
 
 bootstrap_content="$(cat "$BOOTSTRAP_FILE")"
-for token in "REPO_TARBALL_URL" "codeload.github.com/ShylockJEe/Openclaw_tool" "install.sh" "--fast"; do
+for token in "RAW_BASE_URL" "raw.githubusercontent.com" "scripts/lib/common.sh" "scripts/lib/diagnose.sh" "scripts/lib/preflight.sh" "--fast"; do
   if [[ "$bootstrap_content" != *"$token"* ]]; then
     echo "FAIL: missing token in bootstrap.sh -> $token" >&2
     exit 1

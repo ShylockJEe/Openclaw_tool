@@ -11,6 +11,7 @@ curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/boots
 说明：
 - `--fast` 会先输出快速检测摘要，然后自动继续安装
 - Windows 仍会保留一次 WSL2 推荐确认
+- 无需先 clone 仓库，bootstrap 会自动拉取安装所需脚本与依赖检测逻辑
 
 ## 仓库方式（可审计）
 

@@ -8,7 +8,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
       sh|dash|ash)
         echo "ERROR: This installer must run with bash, not sh."
         echo "Use:"
-        echo "  curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh | bash -s -- --fast"
+        echo "  curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh | bash -s -- --fast"
         exit 1
         ;;
       *)
