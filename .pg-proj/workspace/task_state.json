@@ -1,0 +1,8 @@
+{
+  "task_id": "openclaw-windows-wsl-first",
+  "task_name": "Windows 优先 WSL2 与全量环境检测",
+  "current_phase": 8,
+  "phase_name": "交付检查",
+  "started_at": "2026-02-27T06:15:00Z",
+  "checklist_path": ".pg-proj/workspace/checklist.md"
+}
