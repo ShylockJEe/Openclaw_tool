@@ -1,8 +1,8 @@
 {
-  "task_id": "openclaw-windows-wsl-first",
-  "task_name": "Windows 优先 WSL2 与全量环境检测",
+  "task_id": "openclaw-usage-simplify",
+  "task_name": "简化安装脚本使用方式",
   "current_phase": 8,
   "phase_name": "交付检查",
-  "started_at": "2026-02-27T06:15:00Z",
+  "started_at": "2026-02-27T06:45:00Z",
   "checklist_path": ".pg-proj/workspace/checklist.md"
 }

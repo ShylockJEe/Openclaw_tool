@@ -37,6 +37,13 @@ case_dry_run_success() {
   assert_contains "$out" "Dry-run completed."
 }
 
+case_fast_mode() {
+  local out
+  out="$(OPENCLAW_TEST_MODE=true OPENCLAW_SKIP_OFFICIAL=true "$ROOT_DIR/install.sh" --fast --dry-run 2>&1)"
+  assert_contains "$out" "mode=fast"
+  assert_contains "$out" "Dry-run completed."
+}
+
 case_skip_flags() {
   local out
   out="$(OPENCLAW_TEST_MODE=true OPENCLAW_SKIP_OFFICIAL=true "$ROOT_DIR/install.sh" --dry-run --skip-docker --skip-node --skip-pnpm 2>&1)"
@@ -284,6 +291,7 @@ case_wsl_detection() {
 main() {
   run_case "help" case_help
   run_case "dry-run" case_dry_run_success
+  run_case "fast-mode" case_fast_mode
   run_case "skip-flags" case_skip_flags
   run_case "invalid-argument" case_invalid_argument
   run_case "dns-failure" case_dns_failure_mapping

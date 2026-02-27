@@ -8,6 +8,7 @@ OPENCLAW_SKIP_NODE="${OPENCLAW_SKIP_NODE:-false}"
 OPENCLAW_SKIP_PNPM="${OPENCLAW_SKIP_PNPM:-false}"
 OPENCLAW_SKIP_DOCKER="${OPENCLAW_SKIP_DOCKER:-false}"
 OPENCLAW_VERBOSE="${OPENCLAW_VERBOSE:-false}"
+OPENCLAW_FAST_MODE="${OPENCLAW_FAST_MODE:-false}"
 OPENCLAW_OFFICIAL_SH_URL="${OPENCLAW_OFFICIAL_SH_URL:-https://www.openclaw.ai/install.sh}"
 OPENCLAW_OFFICIAL_PS1_URL="${OPENCLAW_OFFICIAL_PS1_URL:-https://www.openclaw.ai/install.ps1}"
 OPENCLAW_LOG_FILE="${OPENCLAW_LOG_FILE:-./openclaw-install.log}"
@@ -99,6 +100,7 @@ print_usage() {
 Usage: ./install.sh [options]
 
 Options:
+  --fast              Fast mode (quick summary + auto-continue)
   --dry-run           Run checks only, do not install
   --allow-sudo        Allow sudo elevation (default)
   --no-sudo           Disable sudo usage
@@ -116,6 +118,10 @@ parse_args() {
     case "$1" in
       --dry-run)
         OPENCLAW_DRY_RUN="true"
+        ;;
+      --fast)
+        OPENCLAW_FAST_MODE="true"
+        OPENCLAW_VERBOSE="true"
         ;;
       --allow-sudo)
         OPENCLAW_ALLOW_SUDO="true"

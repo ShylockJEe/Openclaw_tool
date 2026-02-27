@@ -19,6 +19,12 @@ print_banner() {
 EOF
 }
 
+print_quick_summary() {
+  log_info "Quick summary:"
+  log_info "  os=${DETECTED_OS:-unknown} arch=${DETECTED_ARCH:-unknown} pkg=${PKG_MANAGER:-none}"
+  log_info "  mode=$([[ "$OPENCLAW_FAST_MODE" == "true" ]] && echo fast || echo standard) dry_run=$OPENCLAW_DRY_RUN"
+}
+
 dependency_plan() {
   local items=()
 
@@ -201,6 +207,7 @@ main() {
     return "$code"
   fi
 
+  print_quick_summary
   preview_plan
 
   if [[ "$OPENCLAW_DRY_RUN" == "true" ]]; then
