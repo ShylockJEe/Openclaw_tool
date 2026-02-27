@@ -5,11 +5,11 @@
 
 set -euo pipefail
 
-RAW_URL="${OPENCLAW_RAW_INSTALL_URL:-https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh}"
+RAW_URL="${OPENCLAW_RAW_INSTALL_URL:-https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh}"
 TMP_FILE="$(mktemp /tmp/openclaw-install-XXXXXX.sh)"
 trap 'rm -f "$TMP_FILE"' EXIT
 
 curl -fsSL "$RAW_URL" -o "$TMP_FILE"
 chmod +x "$TMP_FILE"
 
-exec bash "$TMP_FILE" --fast "$@"
+exec bash "$TMP_FILE" "$@"

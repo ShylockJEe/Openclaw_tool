@@ -5,6 +5,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 README_FILE="$ROOT_DIR/README.md"
 TEMPLATE_FILE="$ROOT_DIR/templates/hosted-install.sh.template"
+BOOTSTRAP_FILE="$ROOT_DIR/bootstrap.sh"
 
 if [[ ! -f "$README_FILE" ]]; then
   echo "FAIL: README.md not found" >&2
@@ -20,7 +21,7 @@ for token in "./install.sh" "install.ps1" "--dry-run" "--skip-docker" "openclaw-
   fi
 done
 
-for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh" "| bash -s -- --fast"; do
+for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh" "| bash -s -- --fast"; do
   if [[ "$content" != *"$token"* ]]; then
     echo "FAIL: missing fast-install token in README.md -> $token" >&2
     exit 1
@@ -32,10 +33,23 @@ if [[ ! -f "$TEMPLATE_FILE" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$BOOTSTRAP_FILE" ]]; then
+  echo "FAIL: bootstrap script not found -> $BOOTSTRAP_FILE" >&2
+  exit 1
+fi
+
 template_content="$(cat "$TEMPLATE_FILE")"
-for token in "OPENCLAW_RAW_INSTALL_URL" "--fast" "curl -fsSL" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/install.sh"; do
+for token in "OPENCLAW_RAW_INSTALL_URL" "curl -fsSL" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh"; do
   if [[ "$template_content" != *"$token"* ]]; then
     echo "FAIL: missing token in hosted template -> $token" >&2
+    exit 1
+  fi
+done
+
+bootstrap_content="$(cat "$BOOTSTRAP_FILE")"
+for token in "REPO_TARBALL_URL" "codeload.github.com/ShylockJEe/Openclaw_tool" "install.sh" "--fast"; do
+  if [[ "$bootstrap_content" != *"$token"* ]]; then
+    echo "FAIL: missing token in bootstrap.sh -> $token" >&2
     exit 1
   fi
 done

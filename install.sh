@@ -23,7 +23,15 @@ fi
 
 set -uo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-}"
+if [[ -z "$SCRIPT_SOURCE" ]]; then
+  echo "ERROR: install.sh cannot run from stdin because it requires bundled library files."
+  echo "Use:"
+  echo "  curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh | bash -s -- --fast"
+  exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 
 # shellcheck source=scripts/lib/common.sh
 source "$SCRIPT_DIR/scripts/lib/common.sh"
