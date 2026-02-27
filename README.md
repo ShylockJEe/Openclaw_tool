@@ -5,7 +5,8 @@
 网络正常时，直接执行：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh | bash -s -- --fast
+(curl -fsSL https://raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh || \
+ curl -fsSL https://cdn.jsdelivr.net/gh/ShylockJEe/Openclaw_tool@main/bootstrap.sh) | bash -s -- --fast
 ```
 
 说明：

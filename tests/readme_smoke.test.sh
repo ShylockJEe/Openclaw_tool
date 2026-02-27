@@ -21,7 +21,7 @@ for token in "./install.sh" "install.ps1" "--dry-run" "--skip-docker" "openclaw-
   fi
 done
 
-for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh" "| bash -s -- --fast"; do
+for token in "curl -fsSL" "--fast" "一条命令" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh" "cdn.jsdelivr.net/gh/ShylockJEe/Openclaw_tool@main/bootstrap.sh" "| bash -s -- --fast"; do
   if [[ "$content" != *"$token"* ]]; then
     echo "FAIL: missing fast-install token in README.md -> $token" >&2
     exit 1
@@ -39,7 +39,7 @@ if [[ ! -f "$BOOTSTRAP_FILE" ]]; then
 fi
 
 template_content="$(cat "$TEMPLATE_FILE")"
-for token in "OPENCLAW_RAW_INSTALL_URL" "curl -fsSL" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh"; do
+for token in "OPENCLAW_RAW_INSTALL_URL" "OPENCLAW_FALLBACK_INSTALL_URL" "curl -fsSL" "raw.githubusercontent.com/ShylockJEe/Openclaw_tool/main/bootstrap.sh" "cdn.jsdelivr.net/gh/ShylockJEe/Openclaw_tool@main/bootstrap.sh"; do
   if [[ "$template_content" != *"$token"* ]]; then
     echo "FAIL: missing token in hosted template -> $token" >&2
     exit 1
@@ -47,7 +47,7 @@ for token in "OPENCLAW_RAW_INSTALL_URL" "curl -fsSL" "raw.githubusercontent.com/
 done
 
 bootstrap_content="$(cat "$BOOTSTRAP_FILE")"
-for token in "RAW_BASE_URL" "raw.githubusercontent.com" "scripts/lib/common.sh" "scripts/lib/diagnose.sh" "scripts/lib/preflight.sh" "--fast"; do
+for token in "RAW_BASE_URL_DEFAULT" "JSDELIVR_BASE_URL_DEFAULT" "BASE_CANDIDATES" "raw.githubusercontent.com" "cdn.jsdelivr.net/gh" "scripts/lib/common.sh" "scripts/lib/diagnose.sh" "scripts/lib/preflight.sh" "--fast"; do
   if [[ "$bootstrap_content" != *"$token"* ]]; then
     echo "FAIL: missing token in bootstrap.sh -> $token" >&2
     exit 1
